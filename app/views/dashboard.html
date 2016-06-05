@@ -1,0 +1,84 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Dashboard</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+	<link rel="stylesheet" href="/static/css/styles.css" type="text/css">
+</head>
+<body>
+<nav class="navbar navbar-default">
+<div class="container-fluid">
+	<!-- Brand and toggle get grouped for better mobile display -->
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="#">Welcome, {{ session['name'] }}</a>
+	</div>
+
+	<!-- Collect the nav links, forms, and other content for toggling -->
+	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="/logout">Logout</a></li>
+		</ul>
+	</div><!-- /.navbar-collapse -->
+</div><!-- /.container-fluid -->
+</nav>
+<div class='container'>
+	<div class='row col-md-10 col-md-offset-1'>
+		<h3>Here's a List of your Friends:</h3>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th class="col-md-6">Actions</th>
+				</tr> 
+			</thead>
+			<tbody>
+	{% for friend in all_friends: %}
+				<tr>
+					<td>{{ friend['friend_name'] }}</td>
+					<td>
+						<form class="form-inline" style="display: inline;" action="/show/{{ friend['id'] }}">
+							<button class="btn btn-primary" type="submit">View Profile</button>
+						</form>
+						<form class="form-inline" style="display: inline;" action="/remove/{{ friend['id'] }}" method="POST">
+							<button class="btn btn-danger" type="submit">Remove as Friend</button>
+						</form>
+					</td>		
+				</tr>
+	{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class='row col-md-10 col-md-offset-1'>
+			<h3>Other Users not on your friend's list:</h3>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th class="col-md-6">Name</th>
+					<th>Action</th>
+				</tr> 
+			</thead>
+			<tbody>
+	{% for x in displayothers %}
+		{% if x['id'] != session['id'] %}
+				<tr>
+					<td><a href="/show/{{x['id']}}">{{ x['friend_name'] }}</a></td>
+					<td><form action ="/friendslist/{{ x['id'] }}" method="post"><input type ='submit' class='btn btn-default' value = 'Add as Friend'></form></td>
+				</tr>
+		{% endif %}
+	{% endfor %}
+			</tbody>
+		</table>    
+	</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</body>
+</html>
